@@ -86,8 +86,6 @@ efe.onclick(efe_tiklama)
 
 # Sayaç başlat
 sayac(20)
-
-# Kaplumbağanın hareket etmesini başlat
 kaplumbaga_hareket()
 
 turtle.mainloop()
