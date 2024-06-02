@@ -7,7 +7,7 @@ screen.setup(800, 800)
 screen.bgcolor("lightblue")
 screen.title("Kaplumbağa Yakalama Oyunu")
 
-# Kaplumbağa oluştur
+# Kaplumbağa olustur
 efe = turtle.Turtle()
 efe.shape("turtle")
 efe.turtlesize(3)
