@@ -7,7 +7,7 @@ screen.setup(800, 800)
 screen.bgcolor("lightblue")
 screen.title("Kaplumbağa Yakalama Oyunu")
 
-# Kaplumbağa olustur
+# Kaplumbağa oluştur
 efe = turtle.Turtle()
 efe.shape("turtle")
 efe.turtlesize(3)
@@ -37,7 +37,6 @@ skor_yazi.penup()
 skor_yazi.goto(0, 320)
 skor_yazi.write(f"Skor: {skor}", align="center", font=("Arial", 14, "bold"))
 
-# Sayaç durduğunda kontrol için bayrak
 sayaç_durdu = False
 
 # Sayaç fonksiyonu
@@ -60,7 +59,6 @@ def sayac(time_off):
             sayac_turtle.clear()
             efe.hideturtle()
             sayac_turtle.write("Time's up!", font=style, align='center')
-            sayaç_durdu = True
 
     update_sayac()
 
@@ -77,10 +75,12 @@ def kaplumbaga_hareket():
 # Kaplumbağaya tıklama olayı
 def efe_tiklama(x, y):
     global skor
-    skor += 1
-    skor_yazi.clear()
-    skor_yazi.write(f"Skor: {skor}", align="center", font=("Arial", 14, "bold"))
-    efe.hideturtle()
+    if not sayaç_durdu:
+        skor += 1
+        skor_yazi.clear()
+        skor_yazi.write(f"Skor: {skor}", align="center", font=("Arial", 14, "bold"))
+        efe.hideturtle()
+
 
 efe.onclick(efe_tiklama)
 
