@@ -1,14 +1,11 @@
 import turtle
 from random import randint
-from time import sleep
-import threading
 
 # Ekranı ayarla
 screen = turtle.Screen()
 screen.setup(800, 800)
 screen.bgcolor("lightblue")
 screen.title("Kaplumbağa Yakalama Oyunu")
-
 
 # Kaplumbağa oluştur
 efe = turtle.Turtle()
@@ -27,35 +24,70 @@ def teleport(x, y):
 yazi = turtle.Turtle()
 yazi.hideturtle()
 yazi.penup()
-yazi.goto(0, 350)  #
+yazi.goto(0, 350)
 yazi.write("Kaplumbağa Yakalama Oyunu", align="center", font=("Arial", 16, "bold"))
 
+# Skoru tutacak değişken
+skor = 0
 
-def sayac():
+# Skor yazıcısı
+skor_yazi = turtle.Turtle()
+skor_yazi.hideturtle()
+skor_yazi.penup()
+skor_yazi.goto(0, 320)
+skor_yazi.write(f"Skor: {skor}", align="center", font=("Arial", 14, "bold"))
+
+# Sayaç durduğunda kontrol için bayrak
+sayaç_durdu = False
+
+# Sayaç fonksiyonu
+def sayac(time_off):
+    global sayaç_durdu
     sayac_turtle = turtle.Turtle()
-    time_off = 20
+    sayac_turtle.hideturtle()
+    sayac_turtle.penup()
     style = ('Courier', 30, 'italic')
-    while time_off >= 0:
-        sayac_turtle.hideturtle()
-        sayac_turtle.penup()
-        sayac_turtle.goto(0, 300)
-        sayac_turtle.clear()
-        sayac_turtle.write(time_off, font=style, align='center')
-        sleep(1)
-        time_off -= 1
-    sayac_turtle.clear()
-    sayac_turtle.write("Time's up!", font=style, align='center')
 
-# Kaplumbağa rastgele hareket etsin.
-while True:
-    sleep(1)
+    def update_sayac():
+        nonlocal time_off
+        if time_off >= 0:
+            sayac_turtle.clear()
+            sayac_turtle.goto(0, 280)
+            sayac_turtle.write(time_off, font=style, align='center')
+            time_off -= 1
+            screen.ontimer(update_sayac, 1000)
+        else:
+            sayac_turtle.clear()
+            efe.hideturtle()
+            sayac_turtle.write("Time's up!", font=style, align='center')
+            sayaç_durdu = True
+
+    update_sayac()
+
+# Kaplumbağanın rastgele hareket etmesi
+def kaplumbaga_hareket():
+    if not sayaç_durdu:
+        rand = randint(-300, 300)
+        rand2 = randint(-300, 300)
+        efe.hideturtle()
+        teleport(rand, rand2)
+        efe.showturtle()
+        screen.ontimer(kaplumbaga_hareket, 1000)
+
+# Kaplumbağaya tıklama olayı
+def efe_tiklama(x, y):
+    global skor
+    skor += 1
+    skor_yazi.clear()
+    skor_yazi.write(f"Skor: {skor}", align="center", font=("Arial", 14, "bold"))
     efe.hideturtle()
-    rand = randint(-300, 300)
-    rand2 = randint(-300, 300)
-    teleport(rand, rand2)
-    efe.showturtle()
-    sayac()
 
+efe.onclick(efe_tiklama)
 
+# Sayaç başlat
+sayac(20)
+
+# Kaplumbağanın hareket etmesini başlat
+kaplumbaga_hareket()
 
 turtle.mainloop()
